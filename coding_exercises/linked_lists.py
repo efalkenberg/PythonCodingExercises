@@ -10,6 +10,9 @@ class Node(object):
     def get_data(self):
         return self.data
 
+    def set_data(self, new_data):
+        self.data = new_data
+
     def get_next(self):
         return self.next_node
 
@@ -20,8 +23,11 @@ class Node(object):
         end = self
         while end.get_next() is not None:
             end = end.get_next()
-        end.set_next(Node(value))
-    
+        if type(value) is int: 
+            end.set_next(Node(value))
+        else:
+            end.set_next(value)
+
     def length(self):
         length = 1
         end = self
@@ -91,4 +97,67 @@ class LinkedListsUtils:
             else:
                 # we  already found the index, just pass forward the result
                 return prev
+    
+    @staticmethod
+    def reverse_list(input, prev=None):
+        if input.get_next() is not None:
+            head = LinkedListsUtils.reverse_list(input.get_next(), input)
+            input.set_next(prev)
+            return head
+        else:
+            input.set_next(prev)
+            return input
+
+    @staticmethod
+    def remove_single_node(node):
+        while node.get_next().get_next() is not None:
+            node.set_data(node.get_next().get_data())
+            node = node.get_next()
+        
+        node.set_data(node.get_next().get_data())
+        node.set_next(None)
+    
+    @staticmethod
+    def find_loop_in_linked_list(node):
+        seen = set()
+        while node.get_next() is not None:
+            if node in seen:
+                return node
+            seen.add(node)
+            node = node.get_next()
+        return None
+    
+    @staticmethod 
+    def linked_list_contains_loop(node, depth=1):
+        if node is None:
+            # end of list, no loop
+            return False
+
+        # a loop can not be longer than the entire list, so looking forward
+        # as many steps as we are into the list is enough
+        check_node = node.get_next()
+        for n in range(0, depth, 1):
+            if check_node is None:
+                # end of list, no loop
+                return False
+            else:
+                if node is check_node:
+                    # loop detected
+                    return True 
+            check_node = check_node.get_next()
+        
+        # no loop detected, move on with the next element
+        return LinkedListsUtils.linked_list_contains_loop(node.get_next(), depth + 1)
+
+    @staticmethod
+    def test_linked_list_contains_loop_2_runner(node):
+        runnerSlow = node
+        runnerFast = node
+        while runnerSlow is not None and runnerFast is not None and runnerFast.get_next() is not None:
+            runnerSlow = runnerSlow.get_next()
+            runnerFast = runnerFast.get_next().get_next()
+            if runnerSlow is runnerFast:
+                return True
+        return False
+
                 

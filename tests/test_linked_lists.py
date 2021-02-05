@@ -58,5 +58,76 @@ class TestLinkedLists(unittest.TestCase):
         self.assertEqual(ll.LinkedListsUtils.kth_to_last(linked_list, 1).get_data(), 2)
         self.assertEqual(ll.LinkedListsUtils.kth_to_last(linked_list, 7).get_data(), 8)
     
+    def test_reverse_list(self):
+        linked_list = ll.Node(8)
+        linked_list.append_end(7)
+        linked_list.append_end(6)
+        linked_list.append_end(5)
+        linked_list.append_end(4)
+        linked_list.append_end(3)
+        linked_list.append_end(2)
+        linked_list.append_end(1)
+        self.assertEqual(ll.LinkedListsUtils.reverse_list(linked_list).get_data(), 1)
+        self.assertEqual(ll.LinkedListsUtils.reverse_list(linked_list).length(), linked_list.length())
+
+    def test_remove_single_node(self):
+        linked_list = ll.Node(8)
+        node2 = ll.Node(5)
+        linked_list.set_next(node2)
+        linked_list.append_end(7)
+        linked_list.append_end(6)
+        linked_list.append_end(5)
+        linked_list.append_end(4)
+        linked_list.append_end(3)
+        linked_list.append_end(2)
+        linked_list.append_end(1)
+
+        self.assertEqual(linked_list.length(), 9)
+        self.assertEqual(linked_list.get_next().get_data(), 5)
+        ll.LinkedListsUtils.remove_single_node(node2)
+        self.assertEqual(linked_list.length(), 8)
+        self.assertEqual(linked_list.get_next().get_data(), 7)
+
+    def test_find_loop_in_linked_list(self):
+        linked_list = ll.Node(8)
+        loop = ll.Node(5)
+        linked_list.append_end(loop)
+        linked_list.append_end(7)
+        linked_list.append_end(8)
+        linked_list.append_end(9)
+        self.assertEqual(ll.LinkedListsUtils.find_loop_in_linked_list(linked_list), None)
+        linked_list.append_end(loop)
+        self.assertEqual(ll.LinkedListsUtils.find_loop_in_linked_list(linked_list).get_data(), 5)
+
+    def test_linked_list_contains_loop(self):
+        linked_list = ll.Node(8)
+        loop = ll.Node(5)
+        linked_list.append_end(loop)
+        linked_list.append_end(7)
+        linked_list.append_end(8)
+        linked_list.append_end(9)
+        # no loop
+        self.assertFalse(ll.LinkedListsUtils.linked_list_contains_loop(linked_list))
+        linked_list.append_end(loop)
+        # loop
+        self.assertTrue(ll.LinkedListsUtils.linked_list_contains_loop(linked_list))
+        
+    def test_linked_list_contains_loop_2_runner(self):
+        linked_list = ll.Node(8)
+        loop = ll.Node(5)
+        linked_list.append_end(loop)
+        linked_list.append_end(7)
+        linked_list.append_end(8)
+        linked_list.append_end(9)
+        # no loop
+        self.assertFalse(ll.LinkedListsUtils.test_linked_list_contains_loop_2_runner(linked_list))
+        linked_list.append_end(loop)
+        # loop
+        self.assertTrue(ll.LinkedListsUtils.test_linked_list_contains_loop_2_runner(linked_list))
+
+
+    
+
+
 if __name__ == '__main__':
     unittest.main()
