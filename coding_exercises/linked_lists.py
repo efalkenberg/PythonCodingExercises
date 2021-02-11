@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-class Node(object):
+class LinkedListNode(object):
 
     def __init__(self, data=None, next_node=None):
         self.data = data
@@ -20,11 +20,9 @@ class Node(object):
         self.next_node = new_next
 
     def append_end(self, value):
-        end = self
-        while end.get_next() is not None:
-            end = end.get_next()
+        end = self.last_node()
         if type(value) is int: 
-            end.set_next(Node(value))
+            end.set_next(LinkedListNode(value))
         else:
             end.set_next(value)
 
@@ -36,12 +34,52 @@ class Node(object):
             end = end.get_next()
         return length
 
+    def last_node(self):
+        end = self
+        while end.get_next() is not None:
+            end = end.get_next()
+        return end
+
     def __repr__(self):
         if self.get_next() is not None:
             return str(self.data) + "->" + str(self.get_next())
         else:
             return str(self.data) + "->[END OF LIST]"
 
+class DoubleLinkedListNode(LinkedListNode):
+
+    def __init__(self, data=None):
+        self.data = data
+        self.previous_node = None
+        self.next_node = None
+
+    def set_next(self, new_next):
+        self.next_node = new_next
+
+    def insert(self, value):
+        old_next = self.next_node
+        if type(value) is int: 
+            self.set_next(DoubleLinkedListNode(value))
+        else:
+            self.set_next(value)
+        
+        # set the `previous_node` pointer
+        self.next_node.previous_node = self
+        self.next_node.next_node = old_next
+        if old_next is not None:
+            self.next_node.next_node.previous_node = self.next_node
+        
+    def append_end(self, value):
+        end = self
+        while end.get_next() is not None:
+            end = end.get_next()
+        end.insert(value)
+
+    def __repr__(self):
+        if self.get_next() is not None:
+            return str(self.data) + "<->" + str(self.get_next())
+        else:
+            return str(self.data) + "->[END OF LIST]"
 
 class LinkedListsUtils:
 
@@ -51,10 +89,10 @@ class LinkedListsUtils:
         end = None
         for element in input:
             if head is None:
-                head = Node(element)
+                head = LinkedListNode(element)
                 end = head
             else:
-                end.setNext(Node(element))
+                end.setNext(LinkedListNode(element))
                 end = end.next_element()
         return head
 

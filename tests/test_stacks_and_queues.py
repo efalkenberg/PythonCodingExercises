@@ -60,8 +60,18 @@ class TestStack(unittest.TestCase):
         self.assertEqual(stack.get_min(), 100)
         self.assertEqual(stack.pop(), 400)
         self.assertEqual(stack.get_min(), 100)
-    
 
+    def test_stack_of_plates(self):
+        stack = sq.StackOfPlates(3)
+        stack.push(1)
+        stack.push(2)
+        stack.push(3)
+        stack.push(4)
+        self.assertEqual(stack.pop(), 4)
+        stack.push(4)
+        self.assertEqual(stack.pop(), 4)
+        stack.pop()
+        self.assertEqual(stack.pop(), 3)
 
 if __name__ == '__main__':
     unittest.main()

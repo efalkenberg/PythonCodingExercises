@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+
 class Stack(object):
 
     def __init__(self, data=None, next_node=None):
@@ -50,6 +51,7 @@ class MultiStack(object):
     def __repr__(self):
         return str(self.data)
 
+
 class MinStack(object):
         
     def __init__(self):
@@ -75,12 +77,31 @@ class MinStack(object):
         return str(self.data) + " min:" + str(self.min)
 
 
+class StackOfPlates(object):
+    
+    def __init__(self, stack_max_height):
+        self.stack_max_height = stack_max_height
+        self.data = [[]]
+    
+    def push(self, value):
+        idx = len(self.data)-1
+        if len(self.data[idx]) >= self.stack_max_height:
+            self.data.append([value])
+        else:
+            self.data[idx].append(value)
+    
+    def pop(self):
+        idx = len(self.data)-1
+        if len(self.data[idx]) < 1:
+            self.data.pop(idx)
+            idx -= 1
+        idx2 = len(self.data[idx])-1
+        value = self.data[idx].pop(idx2)
+        return value
+
+    def __repr__(self):
+        return str(self.data) 
 
 
-class StackUtils:
-
-    @staticmethod
-    def reverse_stack(input):
-        return input
 
                 

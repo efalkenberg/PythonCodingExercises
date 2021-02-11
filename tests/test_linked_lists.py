@@ -11,19 +11,19 @@ import coding_exercises.linked_lists as ll
 class TestLinkedLists(unittest.TestCase):
 
     def test_class_node(self):
-        head = ll.Node(5)
+        head = ll.ListNode(5)
         self.assertEqual(head.get_data(), 5)
-        head.set_next(ll.Node(42))
+        head.set_next(ll.ListNode(42))
         self.assertEqual(head.get_next().get_data(), 42)
 
-        linked_list = ll.Node(5)
+        linked_list = ll.ListNode(5)
         linked_list.append_end(17)
         linked_list.append_end(19)
         linked_list.append_end(25)
         self.assertEqual(linked_list.length(), 4)
     
     def test_remove_duplicate_from_linked_list(self):
-        linked_list = ll.Node(5)
+        linked_list = ll.ListNode(5)
         linked_list.append_end(17)
         linked_list.append_end(19)
         linked_list.append_end(25)
@@ -33,7 +33,7 @@ class TestLinkedLists(unittest.TestCase):
         self.assertEqual(linked_list.length(), 4)
         
     def test_remove_duplicate_from_linked_list_2(self):
-        linked_list = ll.Node(5)
+        linked_list = ll.ListNode(5)
         linked_list.append_end(5)
         linked_list.append_end(3)
         linked_list.append_end(7)
@@ -46,7 +46,7 @@ class TestLinkedLists(unittest.TestCase):
         self.assertEqual(linked_list.length(), 4)
 
     def test_kth_to_last(self):
-        linked_list = ll.Node(8)
+        linked_list = ll.ListNode(8)
         linked_list.append_end(7)
         linked_list.append_end(6)
         linked_list.append_end(5)
@@ -59,7 +59,7 @@ class TestLinkedLists(unittest.TestCase):
         self.assertEqual(ll.LinkedListsUtils.kth_to_last(linked_list, 7).get_data(), 8)
     
     def test_reverse_list(self):
-        linked_list = ll.Node(8)
+        linked_list = ll.ListNode(8)
         linked_list.append_end(7)
         linked_list.append_end(6)
         linked_list.append_end(5)
@@ -71,8 +71,8 @@ class TestLinkedLists(unittest.TestCase):
         self.assertEqual(ll.LinkedListsUtils.reverse_list(linked_list).length(), linked_list.length())
 
     def test_remove_single_node(self):
-        linked_list = ll.Node(8)
-        node2 = ll.Node(5)
+        linked_list = ll.ListNode(8)
+        node2 = ll.ListNode(5)
         linked_list.set_next(node2)
         linked_list.append_end(7)
         linked_list.append_end(6)
@@ -89,8 +89,8 @@ class TestLinkedLists(unittest.TestCase):
         self.assertEqual(linked_list.get_next().get_data(), 7)
 
     def test_find_loop_in_linked_list(self):
-        linked_list = ll.Node(8)
-        loop = ll.Node(5)
+        linked_list = ll.ListNode(8)
+        loop = ll.ListNode(5)
         linked_list.append_end(loop)
         linked_list.append_end(7)
         linked_list.append_end(8)
@@ -100,8 +100,8 @@ class TestLinkedLists(unittest.TestCase):
         self.assertEqual(ll.LinkedListsUtils.find_loop_in_linked_list(linked_list).get_data(), 5)
 
     def test_linked_list_contains_loop(self):
-        linked_list = ll.Node(8)
-        loop = ll.Node(5)
+        linked_list = ll.ListNode(8)
+        loop = ll.ListNode(5)
         linked_list.append_end(loop)
         linked_list.append_end(7)
         linked_list.append_end(8)
@@ -113,8 +113,8 @@ class TestLinkedLists(unittest.TestCase):
         self.assertTrue(ll.LinkedListsUtils.linked_list_contains_loop(linked_list))
         
     def test_linked_list_contains_loop_2_runner(self):
-        linked_list = ll.Node(8)
-        loop = ll.Node(5)
+        linked_list = ll.ListNode(8)
+        loop = ll.ListNode(5)
         linked_list.append_end(loop)
         linked_list.append_end(7)
         linked_list.append_end(8)
