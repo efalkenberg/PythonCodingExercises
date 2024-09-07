@@ -3,48 +3,73 @@
 
 class LinkedListNode(object):
 
-    def __init__(self, data=None, next_node=None):
-        self.data = data
-        self.next_node = next_node
+    def __init__(self, value=None, next_node=None):
+        self._value = value
+        self._next = next_node
 
-    def get_data(self):
-        return self.data
+    @property
+    def value(self):
+        return self._value
+    @value.setter
+    def value(self, new_value):
+        if new_value is None or not isinstance(new_value, int):
+            raise TypeError("Input must be set and of type `int`")
+        self._value = new_value
 
-    def set_data(self, new_data):
-        self.data = new_data
+    @property
+    def next(self):
+        return self._next
 
-    def get_next(self):
-        return self.next_node
+    @next.setter
+    def next(self, new_next):
+        if new_next is not None and not isinstance(new_next, LinkedListNode):
+            raise TypeError("Input must be `None` or `LinkedListNode`")
+        self._next = new_next
 
-    def set_next(self, new_next):
-        self.next_node = new_next
+    def append(self, value):
+        if value is None:
+            self._next = None
+
+        if isinstance(value, int):
+            if self._next is None:
+                self._next = LinkedListNode(value)
+            else:
+                new_next = LinkedListNode(value)
+                new_next.next = self._next.next
+                self._next = new_next
+        elif isinstance(value, LinkedListNode):
+            if self._next is None:
+                self._next = value
+            else:
+                value.next = self._next
+                self._next = value
+        else:
+            raise TypeError("Input must be set and of type `int` or `LinkedListNode`")
 
     def append_end(self, value):
-        end = self.last_node()
-        if type(value) is int: 
-            end.set_next(LinkedListNode(value))
-        else:
-            end.set_next(value)
+        if value is None:
+            raise TypeError("Input must be set")
+        self.last_node().append(value)
 
     def length(self):
         length = 1
         end = self
-        while end.get_next() is not None:
+        while end.next is not None:
             length += 1
-            end = end.get_next()
+            end = end.next
         return length
 
     def last_node(self):
         end = self
-        while end.get_next() is not None:
-            end = end.get_next()
+        while end.next is not None:
+            end = end.next
         return end
 
-    def __repr__(self):
-        if self.get_next() is not None:
-            return str(self.data) + "->" + str(self.get_next())
-        else:
-            return str(self.data) + "->[END OF LIST]"
+    # def __repr__(self):
+    #     if self._next is not None:
+    #         return str(self._value) + "->" + str(self._next)
+    #     else:
+    #         return str(self._data) + "->[END OF LIST]"
 
 class DoubleLinkedListNode(LinkedListNode):
 
@@ -71,13 +96,13 @@ class DoubleLinkedListNode(LinkedListNode):
         
     def append_end(self, value):
         end = self
-        while end.get_next() is not None:
-            end = end.get_next()
+        while end.next is not None:
+            end = end.next
         end.insert(value)
 
     def __repr__(self):
-        if self.get_next() is not None:
-            return str(self.data) + "<->" + str(self.get_next())
+        if self.next is not None:
+            return str(self.data) + "<->" + str(self.next)
         else:
             return str(self.data) + "->[END OF LIST]"
 
@@ -104,12 +129,12 @@ class LinkedListsUtils:
         data = {}
         previous = None
         while head is not None:
-            if head.get_data() in data.keys():
-                previous.set_next(head.get_next())
+            if head.value in data.keys():
+                previous.next = head.next
             else:
-                data[head.get_data()] = "x"
+                data[head.value] = "x"
                 previous = head
-            head = head.get_next()
+            head = head.next
         return input
 
     @staticmethod
@@ -118,13 +143,13 @@ class LinkedListsUtils:
         # an integer (to count the distance from the end on our way back)
         # or a LinkedList to bubble the result back up. We could (should) also have
         # used a tuple or a class here ...
-        if input.get_next() is None:
+        if input.next is None:
             # end of recursion
             if k == 0 :
                 return input
             return 0
         else:
-            prev = LinkedListsUtils.kth_to_last(input.get_next(), k)
+            prev = LinkedListsUtils.kth_to_last(input.next, k)
             if type(prev) is int:
                 # we are coming up from the recursion but haven't found it yet
                 # increment the index and check if this is the one
@@ -138,31 +163,31 @@ class LinkedListsUtils:
     
     @staticmethod
     def reverse_list(input, prev=None):
-        if input.get_next() is not None:
-            head = LinkedListsUtils.reverse_list(input.get_next(), input)
-            input.set_next(prev)
+        if input.next is not None:
+            head = LinkedListsUtils.reverse_list(input.next, input)
+            input.next = prev
             return head
         else:
-            input.set_next(prev)
+            input.next = prev
             return input
 
     @staticmethod
     def remove_single_node(node):
-        while node.get_next().get_next() is not None:
-            node.set_data(node.get_next().get_data())
-            node = node.get_next()
+        while node.next.next is not None:
+            node.value = node.next.value
+            node = node.next
         
-        node.set_data(node.get_next().get_data())
-        node.set_next(None)
+        node.value = node.next.value
+        node.next = None
     
     @staticmethod
     def find_loop_in_linked_list(node):
         seen = set()
-        while node.get_next() is not None:
+        while node.next is not None:
             if node in seen:
                 return node
             seen.add(node)
-            node = node.get_next()
+            node = node.next
         return None
     
     @staticmethod 
@@ -173,7 +198,7 @@ class LinkedListsUtils:
 
         # a loop can not be longer than the entire list, so looking forward
         # as many steps as we are into the list is enough
-        check_node = node.get_next()
+        check_node = node.next
         for n in range(0, depth, 1):
             if check_node is None:
                 # end of list, no loop
@@ -182,18 +207,18 @@ class LinkedListsUtils:
                 if node is check_node:
                     # loop detected
                     return True 
-            check_node = check_node.get_next()
+            check_node = check_node.next
         
         # no loop detected, move on with the next element
-        return LinkedListsUtils.linked_list_contains_loop(node.get_next(), depth + 1)
+        return LinkedListsUtils.linked_list_contains_loop(node.next, depth + 1)
 
     @staticmethod
     def test_linked_list_contains_loop_2_runner(node):
         runnerSlow = node
         runnerFast = node
-        while runnerSlow is not None and runnerFast is not None and runnerFast.get_next() is not None:
-            runnerSlow = runnerSlow.get_next()
-            runnerFast = runnerFast.get_next().get_next()
+        while runnerSlow is not None and runnerFast is not None and runnerFast.next is not None:
+            runnerSlow = runnerSlow.next
+            runnerFast = runnerFast.next.next
             if runnerSlow is runnerFast:
                 return True
         return False
