@@ -1,0 +1,101 @@
+import unittest
+def isPalindrome(x: int) -> bool:
+    x_str = str(x)
+    i1 = 0
+    i2 = len(x_str) -1
+
+    while i2 >= 0:
+        if x_str[i1] != x_str[i2]:
+            return False
+        i1 = i1 +1
+        i2 = i2 -1
+        return True
+
+def romanToInt(s: str) -> int:
+    # Symbol       Value
+    # I             1
+    # V             5
+    # X             10
+    # L             50
+    # C             100
+    # D             500
+    # M             1000
+
+    int_value = 0
+    carryover = 0
+    for idx, value in enumerate(s):
+        if value == 'M':
+            int_value += 1000 + carryover
+            carryover = 0
+        elif value == 'D':
+            int_value += 500 + carryover
+            carryover = 0
+        elif value == 'C':
+            # C can be placed before D (500) and M (1000) to make 400 and 900.
+            if idx < len(s) - 1 and s[idx+1] in ('D', 'M'):
+                carryover = -100
+                continue
+            int_value += 100 + carryover
+            carryover = 0
+        elif value == 'L':
+            int_value += 50 + carryover
+            carryover = 0
+        elif value == 'X':
+            # X can be placed before L (50) and C (100) to make 40 and 90.
+            if idx < len(s) - 1 and s[idx+1] in ('L', 'C'):
+                carryover = -10
+                continue
+            int_value += 10 + carryover
+            carryover = 0
+        elif value == 'V':
+            int_value += 5 + carryover
+            carryover = 0
+        elif value == 'I':
+            # I can be placed before V (5) and X (10) to make 4 and 9.
+            if idx < len(s) - 1 and s[idx+1] in ('V', 'X'):
+                carryover = -1
+                continue
+            int_value += 1
+    return int_value
+
+
+def bracket_checker(s: str) -> bool:
+    # implemented like a classic stack based parser that pushes
+    # and consumes tokens from a stack for syntax checking
+    buffer = []
+    for bracket in s: # for simplicity we assume this is safe
+        if bracket in ['(', '[', '{']:
+            buffer.append(bracket)
+        elif bracket == ')':
+            if len(buffer) < 1 or buffer[-1] != '(':
+                return False
+            del buffer[-1]
+        elif bracket == '}':
+            if len(buffer) < 1 or buffer[-1] != '{':
+                return False
+            del buffer[-1]
+        elif bracket == ']':
+            if len(buffer) < 1 or buffer[-1] != '[':
+                return False
+            del buffer[-1]
+        else:
+            # error state
+            pass
+    return len(buffer) < 1
+
+
+class TestLeetCode(unittest.TestCase):
+    def test_palindrome(self):
+        self.assertTrue(isPalindrome(1234567654321))
+        self.assertFalse(isPalindrome(123456789))
+
+    def test_roman_to_int(self):
+        self.assertTrue(romanToInt("IX"), 9)
+        self.assertTrue(romanToInt("III"), 3)
+        self.assertTrue(romanToInt("LVIII"), 58)
+        self.assertTrue(romanToInt("MCMXCIV"), 1994)
+
+    def test_bracket_checker(self):
+        self.assertTrue(bracket_checker("[[][]{}()]"))
+        self.assertFalse(bracket_checker("[[][]{}()]}"))
+        self.assertFalse(bracket_checker("([)]"))
