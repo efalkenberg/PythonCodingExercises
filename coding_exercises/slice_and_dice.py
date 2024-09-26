@@ -8,6 +8,7 @@ class TestLeetCode(unittest.TestCase):
     def test_the_slice(self):
         s = "today is a good day"
         self.assertEqual(s[0:5], 'today')
+        self.assertEqual(s[2:4], 'da')
         self.assertEqual(s[:-4], 'today is a good')  # start at 0 without the last 4
         self.assertEqual(s[11:-4], 'good')
         self.assertEqual(s[-3:], 'day')

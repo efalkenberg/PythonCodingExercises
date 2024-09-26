@@ -1,4 +1,6 @@
 import unittest
+
+
 def isPalindrome(x: int) -> bool:
     x_str = str(x)
     i1 = 0
@@ -10,6 +12,44 @@ def isPalindrome(x: int) -> bool:
         i1 = i1 +1
         i2 = i2 -1
         return True
+
+
+def is_palindrome_recursive(s: str) -> bool:
+    if len(s) < 2:
+        return True
+
+    if s[0] != s[-1:]:
+        return False
+
+    return is_palindrome_recursive(s[1:-1])
+
+
+def longest_palindrome(s: str) -> str:
+    if not s:
+        return ""
+
+    def search(s: str, left: int, right: int) -> str:
+        if len(s) < 2:
+            return ''
+        if len(s) == 2:
+            return s if s[0] == s[1] else ''
+
+        while left-1 >= 0 and right+1 < len(s) and s[left-1] == s[right+1]:
+            left -= 1
+            right += 1
+
+        palindrome = s[left:right+1] if right-left > 1 else ''
+        return palindrome
+
+    longest_palindrome = ''
+
+    for idx, value in enumerate(s):
+        odd = search(s, idx, idx)
+        even = search(s, idx, idx + 1)
+        longest_palindrome = max((longest_palindrome, even, odd), key=len)
+
+    return longest_palindrome
+
 
 def romanToInt(s: str) -> int:
     # Symbol       Value
@@ -89,6 +129,21 @@ class TestLeetCode(unittest.TestCase):
         self.assertTrue(isPalindrome(1234567654321))
         self.assertFalse(isPalindrome(123456789))
 
+    def test_palindrome_recursive(self):
+        self.assertTrue(is_palindrome_recursive("aa"))
+        self.assertTrue(is_palindrome_recursive("aba"))
+        self.assertFalse(is_palindrome_recursive("abc"))
+        self.assertTrue(is_palindrome_recursive("abcdedcba"))
+        self.assertTrue(is_palindrome_recursive("abcdeffedcba"))
+
+    def test_longest_palindrome(self):
+        self.assertEqual(longest_palindrome("xabay"), "aba")
+        self.assertEqual(longest_palindrome("aa"), "aa")
+        self.assertEqual(longest_palindrome("aba"), "aba")
+        self.assertEqual(longest_palindrome("abcdef"), "")
+        self.assertEqual(longest_palindrome("xgsg3u3fedcbabcdefdy"), "fedcbabcdef")
+        self.assertEqual(longest_palindrome("my racecar has a radar"), " racecar ")
+
     def test_roman_to_int(self):
         self.assertTrue(romanToInt("IX"), 9)
         self.assertTrue(romanToInt("III"), 3)
@@ -99,3 +154,4 @@ class TestLeetCode(unittest.TestCase):
         self.assertTrue(bracket_checker("[[][]{}()]"))
         self.assertFalse(bracket_checker("[[][]{}()]}"))
         self.assertFalse(bracket_checker("([)]"))
+
