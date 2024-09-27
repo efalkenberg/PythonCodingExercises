@@ -27,9 +27,10 @@ def is_palindrome_recursive(s: str) -> bool:
 def longest_palindrome(s: str) -> str:
     if not s:
         return ""
-
+    if len(s) < 2:
+        return s
     def search(s: str, left: int, right: int) -> str:
-        if len(s) < 2:
+        if right == len(s):
             return ''
         if len(s) == 2:
             return s if s[0] == s[1] else ''
@@ -38,7 +39,7 @@ def longest_palindrome(s: str) -> str:
             left -= 1
             right += 1
 
-        palindrome = s[left:right+1] if right-left > 1 else ''
+        palindrome = s[left:right+1] if (right - left > 0 and s[left] == s[right]) else ''
         return palindrome
 
     longest_palindrome = ''
@@ -137,9 +138,12 @@ class TestLeetCode(unittest.TestCase):
         self.assertTrue(is_palindrome_recursive("abcdeffedcba"))
 
     def test_longest_palindrome(self):
+        self.assertEqual(longest_palindrome("a"), "a")
+        self.assertEqual(longest_palindrome("ac"), "")
         self.assertEqual(longest_palindrome("xabay"), "aba")
         self.assertEqual(longest_palindrome("aa"), "aa")
         self.assertEqual(longest_palindrome("aba"), "aba")
+        self.assertEqual(longest_palindrome("cbbd"), "bb")
         self.assertEqual(longest_palindrome("abcdef"), "")
         self.assertEqual(longest_palindrome("xgsg3u3fedcbabcdefdy"), "fedcbabcdef")
         self.assertEqual(longest_palindrome("my racecar has a radar"), " racecar ")
