@@ -155,6 +155,30 @@ def find_and_remove(node: ListNode, index) -> int:
         return n + 1
 
 
+def letter_combinations(digits: str) -> [str]:
+    mapping = {
+        "2": ["a", "b", "c"],
+        "3": ["d", "e", "f"],
+        "4": ["g", "h", "i"],
+        "5": ["j", "k", "l"],
+        "6": ["m", "n", "o"],
+        "7": ["p", "q", "r", "s"],
+        "8": ["t", "u", "v"],
+        "9": ["w", "x", "y", "z"]
+    }
+    output = []
+    for num_val in digits:
+        if len(output) == 0:
+            output = mapping[num_val]
+        else:
+            tmp = []
+            for char_val in mapping[num_val]:
+                for output_item in output:
+                    tmp.append(output_item + char_val)
+            output = tmp
+    return output
+
+
 class TestLeetCode(unittest.TestCase):
     def test_palindrome(self):
         self.assertTrue(isPalindrome(1234567654321))
@@ -201,5 +225,10 @@ class TestLeetCode(unittest.TestCase):
         self.assertEqual(head.next.next.val, 3)
         self.assertEqual(head.next.next.next.val, 5)
         self.assertEqual(head.next.next.next.next, None)
+
+    def test_letter_combinations(self):
+        self.assertEqual(letter_combinations(""), [])
+        self.assertEqual(set(letter_combinations("2")), set(["a", "b", "c"]))
+        self.assertEqual(set(letter_combinations("23")), set(["ad","ae","af","bd","be","bf","cd","ce","cf"]))
 
 
