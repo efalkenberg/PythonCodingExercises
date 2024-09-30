@@ -179,6 +179,36 @@ def letter_combinations(digits: str) -> [str]:
     return output
 
 
+def is_valid_sudoku(board: [str]) -> bool:
+    # check rows and columns
+    for i in range(9):
+        tmp_c = set()
+        tmp_r = set()
+        for j in range(9):
+            # i'th row
+            if board[i][j] != ".":
+                if board[i][j] in tmp_r:
+                    return False
+                tmp_r.add(board[i][j])
+            # j'th column
+            if board[j][i] != ".":
+                if board[j][i] in tmp_c:
+                    return False
+                tmp_c.add(board[j][i])
+
+    # check 9x9 grids
+    for offset_i in range(3):
+        for offset_j in range(3):
+            tmp_g = set()
+            for i in range(3):
+                for j in range(3):
+                    i_with_offset = i + offset_i * 3
+                    j_with_offset = j + offset_j * 3
+                    if board[i_with_offset][j_with_offset] != ".":
+                        if board[i_with_offset][j_with_offset] in tmp_g:
+                            return False
+                        tmp_g.add(board[i_with_offset][j_with_offset])
+    return True
 class TestLeetCode(unittest.TestCase):
     def test_palindrome(self):
         self.assertTrue(isPalindrome(1234567654321))
@@ -230,5 +260,25 @@ class TestLeetCode(unittest.TestCase):
         self.assertEqual(letter_combinations(""), [])
         self.assertEqual(set(letter_combinations("2")), set(["a", "b", "c"]))
         self.assertEqual(set(letter_combinations("23")), set(["ad","ae","af","bd","be","bf","cd","ce","cf"]))
+
+    def test_is_valid_sudoku(self):
+        self.assertTrue(is_valid_sudoku([["5","3",".",".","7",".",".",".","."]
+                                        ,["6",".",".","1","9","5",".",".","."]
+                                        ,[".","9","8",".",".",".",".","6","."]
+                                        ,["8",".",".",".","6",".",".",".","3"]
+                                        ,["4",".",".","8",".","3",".",".","1"]
+                                        ,["7",".",".",".","2",".",".",".","6"]
+                                        ,[".","6",".",".",".",".","2","8","."]
+                                        ,[".",".",".","4","1","9",".",".","5"]
+                                        ,[".",".",".",".","8",".",".","7","9"]]))
+        self.assertFalse(is_valid_sudoku([["8","3",".",".","7",".",".",".","."]
+                                        ,["6",".",".","1","9","5",".",".","."]
+                                        ,[".","9","8",".",".",".",".","6","."]
+                                        ,["8",".",".",".","6",".",".",".","3"]
+                                        ,["4",".",".","8",".","3",".",".","1"]
+                                        ,["7",".",".",".","2",".",".",".","6"]
+                                        ,[".","6",".",".",".",".","2","8","."]
+                                        ,[".",".",".","4","1","9",".",".","5"]
+                                        ,[".",".",".",".","8",".",".","7","9"]]))
 
 
