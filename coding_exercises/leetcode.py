@@ -125,6 +125,36 @@ def bracket_checker(s: str) -> bool:
     return len(buffer) < 1
 
 
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+
+def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
+    if head.next is None:
+        return None
+    n = find_and_remove(head, n)
+    # special case: the head item needs to be removed
+    if n != -1:
+        head = head.next
+    return head
+
+
+def find_and_remove(node: ListNode, index) -> int:
+    if node is None:
+        return 0
+    else:
+        n = find_and_remove(node.next, index)
+        if n == -1:
+            return n  # already found and removed
+        if n == index:
+            node.next = node.next.next
+            return -1
+        return n + 1
+
+
 class TestLeetCode(unittest.TestCase):
     def test_palindrome(self):
         self.assertTrue(isPalindrome(1234567654321))
@@ -158,4 +188,18 @@ class TestLeetCode(unittest.TestCase):
         self.assertTrue(bracket_checker("[[][]{}()]"))
         self.assertFalse(bracket_checker("[[][]{}()]}"))
         self.assertFalse(bracket_checker("([)]"))
+
+    def test_remove_nth_from_end(self):
+        head = ListNode(1)
+        head.next = ListNode(2)
+        head.next.next = ListNode(3)
+        head.next.next.next = ListNode(4)
+        head.next.next.next.next = ListNode(5)
+        head = remove_nth_from_end(head, 2)
+        self.assertEqual(head.val, 1)
+        self.assertEqual(head.next.val, 2)
+        self.assertEqual(head.next.next.val, 3)
+        self.assertEqual(head.next.next.next.val, 5)
+        self.assertEqual(head.next.next.next.next, None)
+
 
