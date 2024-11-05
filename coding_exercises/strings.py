@@ -10,7 +10,7 @@ class StringUtils:
 
         i = 0
         for char in input:
-            for j in range(i+1, len(input), 1):
+            for j in range(i+1, len(input)):
                 if input[i] == input[j]:
                     return False
             i += 1
@@ -19,7 +19,7 @@ class StringUtils:
     @staticmethod
     def urlify(input):
         '''
-        even though python has a lot of fancy string operatins,
+        even though python has a lot of fancy string operations,
         we will do it c-style here and only use basic operations
         where possible
         '''

@@ -6,7 +6,7 @@ class ArrayUtils:
     @staticmethod
     def rotate_matrix(input):
         # we can only rotate square matrices and don't have to rotate 1x1 or 0x0 matrices
-        if  len(input) < 2 or len(input) != len(input[0]):
+        if len(input) < 2 or len(input) != len(input[0]):
             return input
 
         # rotate in layers

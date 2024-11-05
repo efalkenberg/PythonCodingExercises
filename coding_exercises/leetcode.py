@@ -1,7 +1,7 @@
 import unittest
 
 
-def isPalindrome(x: int) -> bool:
+def is_palindrome(x: int) -> bool:
     x_str = str(x)
     i1 = 0
     i2 = len(x_str) -1
@@ -29,6 +29,7 @@ def longest_palindrome(s: str) -> str:
         return ""
     if len(s) < 2:
         return s
+
     def search(s: str, left: int, right: int) -> str:
         if right == len(s):
             return ''
@@ -42,14 +43,14 @@ def longest_palindrome(s: str) -> str:
         palindrome = s[left:right+1] if (right - left > 0 and s[left] == s[right]) else ''
         return palindrome
 
-    longest_palindrome = ''
+    longest_palindrome_found = ''
 
     for idx, value in enumerate(s):
         odd = search(s, idx, idx)
         even = search(s, idx, idx + 1)
-        longest_palindrome = max((longest_palindrome, even, odd), key=len)
+        longest_palindrome_found = max((longest_palindrome_found, even, odd), key=len)
 
-    return longest_palindrome
+    return longest_palindrome_found
 
 
 def romanToInt(s: str) -> int:
@@ -104,8 +105,8 @@ def bracket_checker(s: str) -> bool:
     # implemented like a classic stack based parser that pushes
     # and consumes tokens from a stack for syntax checking
     buffer = []
-    for bracket in s: # for simplicity we assume this is safe
-        if bracket in ['(', '[', '{']:
+    for bracket in s:  # for simplicity, we assume this is safe
+        if bracket in ('(', '[', '{'):
             buffer.append(bracket)
         elif bracket == ')':
             if len(buffer) < 1 or buffer[-1] != '(':
@@ -120,9 +121,9 @@ def bracket_checker(s: str) -> bool:
                 return False
             del buffer[-1]
         else:
-            # error state
-            pass
-    return len(buffer) < 1
+            # error state, invalid token
+            return False
+    return len(buffer) == 0
 
 
 # Definition for singly-linked list.
@@ -209,10 +210,12 @@ def is_valid_sudoku(board: [str]) -> bool:
                             return False
                         tmp_g.add(board[i_with_offset][j_with_offset])
     return True
+
+
 class TestLeetCode(unittest.TestCase):
     def test_palindrome(self):
-        self.assertTrue(isPalindrome(1234567654321))
-        self.assertFalse(isPalindrome(123456789))
+        self.assertTrue(is_palindrome(1234567654321))
+        self.assertFalse(is_palindrome(123456789))
 
     def test_palindrome_recursive(self):
         self.assertTrue(is_palindrome_recursive("aa"))

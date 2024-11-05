@@ -1,5 +1,5 @@
 from collections import defaultdict
-import os.path
+import os
 import unittest
 
 
@@ -12,7 +12,8 @@ class LogParser:
     https://github.com/logpai/loghub/blob/master/Zookeeper/Zookeeper_2k.log_structured.csv
     """
 
-    def parse(self, files: list, filter_levels: list):
+    @staticmethod
+    def parse(files: list, filter_levels: list):
         """
         Parses the given files for the filter levels given and
         writes the matching rows into new files of the following

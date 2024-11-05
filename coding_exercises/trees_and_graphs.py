@@ -1,9 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 import random as r
-import math
-import coding_exercises.linked_lists as ll
+
 
 class Node(object):
 
